@@ -31,16 +31,16 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      * @param remoteMessage Object representing the message received from Firebase Cloud Messaging.
      */
     // [START receive_message]
-    override fun onMessageReceived(remoteMessage: RemoteMessage?) {
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(TAG, "From: ${remoteMessage?.from}")
+        Log.d(TAG, "From: ${remoteMessage.from}")
 
         // TODO Step 3.5 check messages for data
-        // Check if message contains a data payload.
+        //  Check if message contains a data payload.
 
 
         // TODO Step 3.6 check messages for notification and call sendNotification
-        // Check if message contains a notification payload.
+        //  Check if message contains a notification payload.
 
     }
     // [END receive_message]
@@ -48,6 +48,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     //TODO Step 3.2 log registration token
     // [START on_new_token]
 
+    override fun onNewToken(newToken: String) {
+        Log.d(TAG, "Refreshed token: $newToken")
+
+        sendRegistrationToServer(newToken)
+    }
     // [END on_new_token]
 
     /**
@@ -55,7 +60,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      *
      * @param token The new token.
      */
-    private fun sendRegistrationToServer(token: String?) {
+    private fun sendRegistrationToServer(token: String) {
         // TODO: Implement this method to send token to your app server.
     }
 
@@ -65,7 +70,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      * @param messageBody FCM message body received.
      */
     private fun sendNotification(messageBody: String) {
-        val notificationManager = ContextCompat.getSystemService(applicationContext, NotificationManager::class.java) as NotificationManager
+        val notificationManager = ContextCompat.getSystemService(
+            applicationContext,
+            NotificationManager::class.java
+        ) as NotificationManager
         notificationManager.sendNotification(messageBody, applicationContext)
     }
 

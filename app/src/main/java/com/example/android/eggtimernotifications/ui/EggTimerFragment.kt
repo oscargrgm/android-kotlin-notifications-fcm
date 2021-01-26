@@ -24,13 +24,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.eggtimernotifications.R
 import com.example.android.eggtimernotifications.databinding.FragmentEggTimerBinding
-import com.google.firebase.messaging.FirebaseMessaging
 
 class EggTimerFragment : Fragment() {
 
@@ -57,6 +55,10 @@ class EggTimerFragment : Fragment() {
         )
 
         // TODO: Step 3.1 create a new channel for FCM
+        createChannel(
+            getString(R.string.breakfast_notification_channel_id),
+            getString(R.string.breakfast_notification_channel_name)
+        )
 
         // TODO: Step 3.4 call subscribe topics on start
 
@@ -66,14 +68,14 @@ class EggTimerFragment : Fragment() {
     private fun createChannel(channelId: String, channelName: String) {
         // TODO: Step 1.6 START create a channel
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        	// Create channel to show notifications.
+            // Create channel to show notifications.
             val notificationChannel = NotificationChannel(
                 channelId,
                 channelName,
                 // TODO: Step 2.4 change importance
                 NotificationManager.IMPORTANCE_HIGH
             )
-			    // TODO: Step 2.6 disable badges for this channel
+                // TODO: Step 2.6 disable badges for this channel
                 .apply {
                     setShowBadge(false)
                 }
@@ -81,7 +83,8 @@ class EggTimerFragment : Fragment() {
             notificationChannel.enableLights(true)
             notificationChannel.lightColor = Color.RED
             notificationChannel.enableVibration(true)
-            notificationChannel.description = getString(R.string.breakfast_notification_channel_description)
+            notificationChannel.description =
+                getString(R.string.breakfast_notification_channel_description)
 
             val notificationManager = requireActivity().getSystemService(
                 NotificationManager::class.java
