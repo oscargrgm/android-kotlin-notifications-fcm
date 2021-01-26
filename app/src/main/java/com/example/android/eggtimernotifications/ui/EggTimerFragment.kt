@@ -24,11 +24,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.eggtimernotifications.R
 import com.example.android.eggtimernotifications.databinding.FragmentEggTimerBinding
+import com.google.firebase.messaging.FirebaseMessaging
 
 class EggTimerFragment : Fragment() {
 
@@ -61,6 +63,7 @@ class EggTimerFragment : Fragment() {
         )
 
         // TODO: Step 3.4 call subscribe topics on start
+        subscribeTopic()
 
         return binding.root
     }
@@ -96,6 +99,16 @@ class EggTimerFragment : Fragment() {
     }
 
     // TODO: Step 3.3 subscribe to breakfast topic
+    private fun subscribeTopic() {
+        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
+            .addOnCompleteListener { task ->
+                val message = getString(
+                    if (task.isSuccessful) R.string.message_subscribed
+                    else R.string.message_subscribe_failed
+                )
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            }
+    }
 
     companion object {
         fun newInstance() = EggTimerFragment()
